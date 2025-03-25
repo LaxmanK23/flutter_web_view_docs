@@ -1,0 +1,91 @@
+// Copyright 2013 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// ignore_for_file: public_member_api_docs
+
+import 'dart:async';
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
+import 'package:webview_flutter_web/webview_flutter_web.dart';
+
+void main() {
+  WebViewPlatform.instance = WebWebViewPlatform();
+  runApp(const MaterialApp(home: _WebViewExample()));
+}
+
+class _WebViewExample extends StatefulWidget {
+  const _WebViewExample();
+
+  @override
+  _WebViewExampleState createState() => _WebViewExampleState();
+}
+
+class _WebViewExampleState extends State<_WebViewExample> {
+  final PlatformWebViewController _controller = PlatformWebViewController(
+    const PlatformWebViewControllerCreationParams(),
+  )..loadRequest(
+    LoadRequestParams(
+      uri: Uri.parse(
+        // 'data:image/jpeg;base64,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',
+        'https://view.officeapps.live.com/op/view.aspx?src=https://storage.googleapis.com/voyagexprivate/tenants%2Ffivestars-qmlbe%2Fsms_forms_files%2FoIBYNy5TW4lh5ckgou4i.xls',
+        // 'https://storage.googleapis.com/voyagexprivate/tenants%2Ffivestars-qmlbe%2Fvessels%2F9185073%2Fhsseq%2Fbimco%2F2021%2FhwWjvMRNLQ9nN4lQnyNi.pdf',
+        // 'https://view.officeapps.live.com/op/view.aspx?src=https://storage.googleapis.com/voyagexprivate/tenants%2Ffivestars-qmlbe%2Fvessels%2F9185073%2Fhsseq%2Fbimco%2F2021%2FhwWjvMRNLQ9nN4lQnyNi.pdf',
+      ),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter WebView example'),
+        actions: <Widget>[_SampleMenu(_controller)],
+      ),
+      body: PlatformWebViewWidget(
+        PlatformWebViewWidgetCreationParams(controller: _controller),
+      ).build(context),
+    );
+  }
+}
+
+enum _MenuOptions { doPostRequest }
+
+class _SampleMenu extends StatelessWidget {
+  const _SampleMenu(this.controller);
+
+  final PlatformWebViewController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<_MenuOptions>(
+      onSelected: (_MenuOptions value) {
+        switch (value) {
+          case _MenuOptions.doPostRequest:
+            _onDoPostRequest(controller);
+        }
+      },
+      itemBuilder:
+          (BuildContext context) => <PopupMenuItem<_MenuOptions>>[
+            const PopupMenuItem<_MenuOptions>(
+              value: _MenuOptions.doPostRequest,
+              child: Text('Post Request'),
+            ),
+          ],
+    );
+  }
+
+  Future<void> _onDoPostRequest(PlatformWebViewController controller) async {
+    final LoadRequestParams params = LoadRequestParams(
+      uri: Uri.parse('https://httpbin.org/post'),
+      method: LoadRequestMethod.post,
+      headers: const <String, String>{
+        'foo': 'bar',
+        'Content-Type': 'text/plain',
+      },
+      body: Uint8List.fromList('Test Body'.codeUnits),
+    );
+    await controller.loadRequest(params);
+  }
+}
